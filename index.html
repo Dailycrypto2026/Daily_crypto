@@ -1,0 +1,119 @@
+HTML
+
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily Crypto</title>
+<style>
+body {
+  margin: 0;
+  font-family: Tahoma, sans-serif;
+  background: #102d42;
+  color: white;
+  text-align: center;
+  padding: 25px 15px;
+}
+.container {
+  max-width: 420px;
+  margin: auto;
+}
+h1 { color: #55dfb1; }
+.card {
+  background: #1d4960;
+  padding: 22px;
+  border-radius: 18px;
+  margin: 18px 0;
+}
+.balance {
+  font-size: 35px;
+  color: #55dfb1;
+  font-weight: bold;
+}
+button {
+  width: 100%;
+  padding: 16px;
+  margin: 8px 0;
+  border: 0;
+  border-radius: 12px;
+  background: #25a982;
+  color: white;
+  font-size: 17px;
+}
+button:disabled { background: #657780; }
+.small { color: #c1d6e2; font-size: 13px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🌟 Daily Crypto</h1>
+  <p>به خانواده ما خوش آمدی!</p>
+
+  <div class="card">
+    <p>موجودی امتیاز شما</p>
+    <div class="balance" id="balance">0 DC</div>
+  </div>
+
+  <div class="card">
+    <h3>🎁 فعالیت روزانه</h3>
+    <p>هر روز ۱۰ امتیاز مجازی بگیر</p>
+    <button id="daily" onclick="claim()">
+      دریافت امتیاز روزانه
+    </button>
+    <p id="message" class="small"></p>
+  </div>
+
+  <div class="card">
+    <h3>👥 دعوت دوستان</h3>
+    <button onclick="invite()">دعوت دوستان</button>
+  </div>
+
+  <p class="small">
+    DC امتیاز آزمایشی است و فعلاً ارزش پولی یا امکان برداشت ندارد.
+  </p>
+</div>
+
+<script>
+let points = Number(localStorage.getItem("dc_points") || 0);
+let lastDay = localStorage.getItem("dc_last_day") || "";
+
+function update() {
+  document.getElementById("balance").innerText = points + " DC";
+  const today = new Date().toLocaleDateString("en-CA");
+  const claimed = lastDay === today;
+  document.getElementById("daily").disabled = claimed;
+  document.getElementById("message").innerText =
+    claimed ? "امروز امتیازت را دریافت کرده‌ای ❤️" :
+    "هنوز امتیاز امروز را دریافت نکرده‌ای.";
+}
+
+function claim() {
+  const today = new Date().toLocaleDateString("en-CA");
+  if (lastDay === today) return;
+  points += 10;
+  lastDay = today;
+  localStorage.setItem("dc_points", points);
+  localStorage.setItem("dc_last_day", lastDay);
+  update();
+}
+
+function invite() {
+  const url = "https://t.me/DailycryptoEarnBot";
+  if (navigator.share) {
+    navigator.share({
+      title: "Daily Crypto",
+      text: "به Daily Crypto بپیوند!",
+      url: url
+    });
+  } else {
+    navigator.clipboard.writeText(url);
+    alert("لینک دعوت کپی شد");
+  }
+}
+
+update();
+</script>
+</body>
+      </html>
+      
